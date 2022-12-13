@@ -15,8 +15,15 @@ struct value
 
 typedef struct value Value;
 
+int array(int* array_x, int* array_y, int new_x, int new_y, int count);
+int delete(int* ptr_array, int size);
+int sort_array(int* array_x, int* array_y, int count);
+
 int main()
 {
+	int array_x[100000];
+	int array_y[100000];
+	int count_array = 0;
 
 	char playing_field[N][N]; //игровое поле
 	char view_field[N][N]; //поле вывода
@@ -169,57 +176,172 @@ int main()
 		check = 0; 
 	}
 
-	for (int i = 0; i < V; i++)
-	{
-
-	}
 	//проверка услови€ головоломки(не работает)
-	/*for (y = 0; y < N; y++)
+	for (y = 0; y < N; y++)
 	{
-		int count = 0;
 		for (x = 0; x < N; x++) //построчна€ проверка на наличие цифры в €чейке массива
 		{
 			if (playing_field[y][x] != '*' && playing_field[y][x] != '#' && playing_field[y][x] != '1')
 			{
-				for (int y1 = y; y1 < N; y1 += 1) 
+				count_array = 0;
+				for (int y1 = y; y1 < N; y1 += 1)
 				{
 					for (int x1 = x; x1 < N; x1 += 1)
 					{
-						if (playing_field[y - 1][x] == '*' || (playing_field[y - 1][x] == playing_field[y][x])) //переход на €чейку сверху дл€ проверки наличи€ вней #
-						{
-							count += 1;
+						if (playing_field[y - 1][x] == '*' || (playing_field[y - 1][x] == playing_field[y][x])) {
+							array(array_x[count_array], array_y[count_array], x1, y1, count_array);
+							count_array++;
 							y1 -= 1;
 						}
-						if (playing_field[y + 1][x] == '*' || (playing_field[y + 1][x] == playing_field[y][x]))	//переход на €чейку снизу дл€ проверки наличи€ вней #
-						{
-							count += 1;
-							y1 += 1;
+						else {
+							if (playing_field[y][x - 1] == '*' || (playing_field[y][x - 1] == playing_field[y][x])) {
+								array(array_x[count_array], array_y[count_array], x1, y1, count_array);
+								count_array++;
+								x1 -= 1;
+							}
+							else {
+								if (playing_field[y][x + 1] == '*' || (playing_field[y][x + 1] == playing_field[y][x])) {
+									array(array_x[count_array], array_y[count_array], x1, y1, count_array);
+									count_array++;
+									x1 += 1;
+								}
+								else {
+									y1 = y;
+									x1 = x;
+								}
+							}
 						}
-						if (playing_field[y][x - 1] == '*' || (playing_field[y][x - 1] == playing_field[y][x]))	//переход на €чейку слева дл€ проверки наличи€ вней #
-						{
-							count += 1;
+
+						if (playing_field[y][x - 1] == '*' || (playing_field[y][x - 1] == playing_field[y][x])) {
+							array(array_x[count_array], array_y[count_array], x1, y1, count_array);
+							count_array++;
 							x1 -= 1;
 						}
-						if (playing_field[y][x + 1] == '*' || (playing_field[y][x + 1] == playing_field[y][x]))	//переход на €чейку справа дл€ проверки наличи€ вней #
-						{
-							count += 1;
+						else {
+							if (playing_field[y - 1][x] == '*' || (playing_field[y - 1][x] == playing_field[y][x])) {
+								array(array_x[count_array], array_y[count_array], x1, y1, count_array);
+								count_array++;
+								y1 -= 1;
+							}
+							else {
+								if (playing_field[y + 1][x] == '*' || (playing_field[y + 1][x] == playing_field[y][x])) {
+									array(array_x[count_array], array_y[count_array], x1, y1, count_array);
+									count_array++;
+									y1 += 1;
+								}
+								else {
+									y1 = y;
+									x1 = x;
+								}
+							}
+						}
+
+						if (playing_field[y][x + 1] == '*' || (playing_field[y][x + 1] == playing_field[y][x])) {
+							array(array_x[count_array], array_y[count_array], x1, y1, count_array);
+							count_array++;
 							x1 += 1;
 						}
+						else {
+							if (playing_field[y - 1][x] == '*' || (playing_field[y - 1][x] == playing_field[y][x])) {
+								array(array_x[count_array], array_y[count_array], x1, y1, count_array);
+								count_array++;
+								y1 -= 1;
+							}
+							else {
+								if (playing_field[y + 1][x] == '*' || (playing_field[y + 1][x] == playing_field[y][x])) {
+									array(array_x[count_array], array_y[count_array], x1, y1, count_array);
+									count_array++;
+									y1 += 1;
+								}
+								else {
+									y1 = y;
+									x1 = x;
+								}
+							}
+						}
+
+						if (playing_field[y + 1][x] == '*' || (playing_field[y + 1][x] == playing_field[y][x])) {
+							array(array_x[count_array], array_y[count_array], x1, y1, count_array);
+							count_array++;
+							y1 += 1;
+						}
+						else {
+							if (playing_field[y][x - 1] == '*' || (playing_field[y][x - 1] == playing_field[y][x])) {
+								array(array_x[count_array], array_y[count_array], x1, y1, count_array);
+								count_array++;
+								x1 -= 1;
+							}
+							else {
+								if (playing_field[y][x + 1] == '*' || (playing_field[y][x + 1] == playing_field[y][x])) {
+									array(array_x[count_array], array_y[count_array], x1, y1, count_array);
+									count_array++;
+									x1 += 1;
+								}
+								else {
+									y1 = y;
+									x1 = x;
+								}
+							}
+
+							
+
+						}
+
 					}
 				}
-				if ((int)count != playing_field[y][x] - '0')
+				sort_array(array_x, array_y, count_array);
+				if ((int)count_array != playing_field[y][x] - '0')
 				{
 					printf("ќшибка");
 					break;
 				}
 			}
 		}
-		
+
+	}
+
+	/*for (int i = 0; i < 15; i++)
+	{
+		int count1 = 0;
+		int count2 = 0;
+		for (int j = islands[i].y; j < 10; j++) {
+			for (int l = islands[i].x; l < 10; l++) {
+				if (playing_field[j][l] == '*' && ())
+			}
+		}
 	}*/
+	
 
 	if (check == 5) printf("√оловоломка решена не правильно"); //если проверка не пройдена, то вывести сообщение об этом 
 
+}	
 
-	
+int array(int* array_x, int* array_y, int new_x, int new_y, int count)
+{
+	array_x[count] = new_x;
+	array_y[count] = new_y;
 }
 
+int sort_array(int* array_x, int* array_y, int count) {
+	for (int i = 0; i < count; i++) {
+		int duble_x = array_x[i];
+		int duble_y = array_y[i];
+		for (int l = 0; l < count; l++) {
+			for (int j = i + 1; j < count; j++) {
+
+				if (duble_x == array_x[j] && duble_y == array_y[j]) {
+					delete(array_x, count, j);
+					delete(array_y, count, j);
+				}
+			}
+		}
+	}
+}
+
+int delete(int* ptr_array, int size, int i) {
+
+	for (; i < size; i++)
+	{
+		ptr_array[i] = ptr_array[i + 1];
+	}
+}
