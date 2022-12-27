@@ -3,7 +3,10 @@
 #include <locale.h>
 #include <math.h>
 #include <conio.h>
-#define N 10 //размер игрового поля
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#define N 10 //СЂР°Р·РјРµСЂ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ
 #define V 15
 
 struct value
@@ -11,29 +14,24 @@ struct value
 	char symbol;
 	int x;
 	int y;
-}; //создание структуры для хранения значения размера островов и их координат
+}; //СЃРѕР·РґР°РЅРёРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ Р·РЅР°С‡РµРЅРёСЏ СЂР°Р·РјРµСЂР° РѕСЃС‚СЂРѕРІРѕРІ Рё РёС… РєРѕРѕСЂРґРёРЅР°С‚
 
 typedef struct value Value;
 
-int array(int* array_x, int* array_y, int new_x, int new_y, int count);
-int delete(int* ptr_array, int size);
-int sort_array(int* array_x, int* array_y, int count);
-
 int main()
 {
-	int array_x[100000];
-	int array_y[100000];
-	int count_array = 0;
-
-	char playing_field[N][N]; //игровое поле
-	char view_field[N][N]; //поле вывода
-	Value islands[V]; //объявление структуры
-	int x, y;	//координаты для объявления значений игрового поля
-	int ox = 0, oy = 0; //координаты курсора
-	int nx, ny; //координаты курсора до перемещения
+	int check_x[N] = {3,4,3,7,2,6,9,4,4,10};
+	int check_y[N] = {4,4,7,5,4,4,7,3,7,7};
+	char playing_field[N][N]; //РёРіСЂРѕРІРѕРµ РїРѕР»Рµ
+	char view_field[N][N]; //РїРѕР»Рµ РІС‹РІРѕРґР°
+	int check_field[N][N]; //РїРѕР»Рµ РїСЂРѕРІРµСЂРєРё
+	Value islands[V]; //СЃС‚СЂСѓРєС‚СѓСЂР° С…СЂР°РЅСЏС‰СЏСЏ РєРѕРѕСЂРґРёРЅР°С‚С‹ Рё Р·РЅР°С‡РµРЅРёСЏ РѕСЃС‚СЂРѕРІРѕРІ
+	int x, y;	//РєРѕРѕСЂРґРёРЅР°С‚С‹ РґР»СЏ РѕР±СЉСЏРІР»РµРЅРёСЏ Р·РЅР°С‡РµРЅРёР№ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ
+	int ox = 0, oy = 0; //РєРѕРѕСЂРґРёРЅР°С‚С‹ РєСѓСЂСЃРѕСЂР°
+	int nx, ny; //РєРѕРѕСЂРґРёРЅР°С‚С‹ РєСѓСЂСЃРѕСЂР° РґРѕ РїРµСЂРµРјРµС‰РµРЅРёСЏ
 	char key = '0',check = '0', check1 = '0';
 
-	islands[0].symbol = '1'; //заполнение структуры 
+	islands[0].symbol = '1'; //Р·Р°РїРѕР»РЅРµРЅРёРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ 
 	islands[0].y = 0;
 	islands[0].x = 2;
 	islands[1].symbol = '2';
@@ -81,7 +79,7 @@ int main()
 
 	setlocale(LC_ALL, "RUS");
 
-	for (y = 0; y < N; y++) //создание игрового поля с помощью двумерного массива
+	for (y = 0; y < N; y++) //СЃРѕР·РґР°РЅРёРµ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ СЃ РїРѕРјРѕС‰СЊСЋ РґРІСѓРјРµСЂРЅРѕРіРѕ РјР°СЃСЃРёРІР°
 	{
 		for (x = 0; x < N; x++)
 		{
@@ -90,51 +88,57 @@ int main()
 		}
 	}
 
-	for (int i = 0; i < V; i++)
-	{
-		playing_field[islands[i].y][islands[i].x] = islands[i].symbol;//присваивание значений из структуры к массиву игрового поля 
+	for (y = 0; y < N; y++) {
+		for (x = 0; x < N; x++) {
+			check_field[y][x] = 0;
+		}
 	}
 
-	do //бесконечный цикл для постоянного ввода значений и перемещения курсора
+	for (int i = 0; i < V; i++)
+	{
+		playing_field[islands[i].y][islands[i].x] = islands[i].symbol;//РїСЂРёСЃРІР°РёРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёР№ РёР· СЃС‚СЂСѓРєС‚СѓСЂС‹ Рє РјР°СЃСЃРёРІСѓ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ 
+	}
+
+	do //Р±РµСЃРєРѕРЅРµС‡РЅС‹Р№ С†РёРєР» РґР»СЏ РїРѕСЃС‚РѕСЏРЅРЅРѕРіРѕ РІРІРѕРґР° Р·РЅР°С‡РµРЅРёР№ Рё РїРµСЂРµРјРµС‰РµРЅРёСЏ РєСѓСЂСЃРѕСЂР°
 	{
 
-		for (y = 0; y < N; y++) //создание игрового поля с помощью двумерного массива
+		for (y = 0; y < N; y++) //СЃРѕР·РґР°РЅРёРµ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ СЃ РїРѕРјРѕС‰СЊСЋ РґРІСѓРјРµСЂРЅРѕРіРѕ РјР°СЃСЃРёРІР°
 		{
 			for (x = 0; x < N; x++)
 			{
-				view_field[y][x] = playing_field[y][x]; //передача значений из массива с данными в массив для вывода на экран
+				view_field[y][x] = playing_field[y][x]; //РїРµСЂРµРґР°С‡Р° Р·РЅР°С‡РµРЅРёР№ РёР· РјР°СЃСЃРёРІР° СЃ РґР°РЅРЅС‹РјРё РІ РјР°СЃСЃРёРІ РґР»СЏ РІС‹РІРѕРґР° РЅР° СЌРєСЂР°РЅ
 
 			}
 		}
 
-		key = _getch(); //считывание нажания клавиатуры
+		key = _getch(); //СЃС‡РёС‚С‹РІР°РЅРёРµ РЅР°Р¶Р°РЅРёСЏ РєР»Р°РІРёР°С‚СѓСЂС‹
 
-		nx = ox; //координаты курсора до перемещения 
-		ny = oy; //координаты курсора до перемещения 
+		nx = ox; //РєРѕРѕСЂРґРёРЅР°С‚С‹ РєСѓСЂСЃРѕСЂР° РґРѕ РїРµСЂРµРјРµС‰РµРЅРёСЏ 
+		ny = oy; //РєРѕРѕСЂРґРёРЅР°С‚С‹ РєСѓСЂСЃРѕСЂР° РґРѕ РїРµСЂРµРјРµС‰РµРЅРёСЏ 
 
-		if (key == 'w' && (oy > -1 && oy < 10)) oy--; //перемещение вверх
-		if (key == 's' && (oy < 10 && oy > -1)) oy++; //перемещение вниз
-		if (key == 'a' && (ox > -1 && ox < 10)) ox--; //перемещение влево
-		if (key == 'd' && (ox > -1 && ox < 10)) ox++; //перемещение вправо
-		if (oy == 10) oy = ny; //проверка на выход за границы игрового поля
-		if (oy == -1) oy = ny; //проверка на выход за границы игрового поля
-		if (ox == 10) ox = nx; //проверка на выход за границы игрового поля
-		if (ox == -1) ox = nx; //проверка на выход за границы игрового поля
+		if (key == 'w' && (oy > -1 && oy < 10)) oy--; //РїРµСЂРµРјРµС‰РµРЅРёРµ РІРІРµСЂС…
+		if (key == 's' && (oy < 10 && oy > -1)) oy++; //РїРµСЂРµРјРµС‰РµРЅРёРµ РІРЅРёР·
+		if (key == 'a' && (ox > -1 && ox < 10)) ox--; //РїРµСЂРµРјРµС‰РµРЅРёРµ РІР»РµРІРѕ
+		if (key == 'd' && (ox > -1 && ox < 10)) ox++; //РїРµСЂРµРјРµС‰РµРЅРёРµ РІРїСЂР°РІРѕ
+		if (oy == 10) oy = ny; //РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ Р·Р° РіСЂР°РЅРёС†С‹ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ
+		if (oy == -1) oy = ny; //РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ Р·Р° РіСЂР°РЅРёС†С‹ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ
+		if (ox == 10) ox = nx; //РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ Р·Р° РіСЂР°РЅРёС†С‹ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ
+		if (ox == -1) ox = nx; //РїСЂРѕРІРµСЂРєР° РЅР° РІС‹С…РѕРґ Р·Р° РіСЂР°РЅРёС†С‹ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ
 		if (playing_field[oy][ox] != '*' && playing_field[oy][ox] != '#')
 		{
-			oy = ny; //запрет на закрашивание и переход на ячейки с цифрами
-			ox = nx; //запрет на закрашивание и переход на ячейки с цифрами
+			oy = ny; //Р·Р°РїСЂРµС‚ РЅР° Р·Р°РєСЂР°С€РёРІР°РЅРёРµ Рё РїРµСЂРµС…РѕРґ РЅР° СЏС‡РµР№РєРё СЃ С†РёС„СЂР°РјРё
+			ox = nx; //Р·Р°РїСЂРµС‚ РЅР° Р·Р°РєСЂР°С€РёРІР°РЅРёРµ Рё РїРµСЂРµС…РѕРґ РЅР° СЏС‡РµР№РєРё СЃ С†РёС„СЂР°РјРё
 		}
 
 		if (key == 'f') 
 		{
-			if (playing_field[oy][ox] == '*') playing_field[oy][ox] = '#'; //закрашивание ячеек
+			if (playing_field[oy][ox] == '*') playing_field[oy][ox] = '#'; //Р·Р°РєСЂР°С€РёРІР°РЅРёРµ СЏС‡РµРµРє
 			else playing_field[oy][ox] = '*';
 		}
 
-		view_field[oy][ox] = '&'; //отображение курсора на текущих координатах
-		system("cls"); //очистка экрана
-		for (y = 0; y < N; y++) //вывод массива в консоль посторчно
+		view_field[oy][ox] = '&'; //РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ РєСѓСЂСЃРѕСЂР° РЅР° С‚РµРєСѓС‰РёС… РєРѕРѕСЂРґРёРЅР°С‚Р°С…
+		system("cls"); //РѕС‡РёСЃС‚РєР° СЌРєСЂР°РЅР°
+		for (y = 0; y < N; y++) //РІС‹РІРѕРґ РјР°СЃСЃРёРІР° РІ РєРѕРЅСЃРѕР»СЊ РїРѕСЃС‚РѕСЂС‡РЅРѕ
 		{
 			for (x = 0; x < N; x++)
 			{
@@ -144,11 +148,55 @@ int main()
 			printf("\n");
 		} 
 		printf("%d,%d\n",oy,ox);
-		printf("Для того, чтобы завершить выполнение и перейти к проверке нажмите 'E' \n"); //приглашение к завершению решения головомки
+		printf("Р”Р»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ Р·Р°РІРµСЂС€РёС‚СЊ РІС‹РїРѕР»РЅРµРЅРёРµ Рё РїРµСЂРµР№С‚Рё Рє РїСЂРѕРІРµСЂРєРµ РЅР°Р¶РјРёС‚Рµ 'E' \n"); //РїСЂРёРіР»Р°С€РµРЅРёРµ Рє Р·Р°РІРµСЂС€РµРЅРёСЋ СЂРµС€РµРЅРёСЏ РіРѕР»РѕРІРѕРјРєРё
 
 	} while (key != 'e');
 
-	for (y = 0; y < N; y++) //проверка строк на наличие 5 идущих подрял символов #
+	//РЎРѕР·РґР°РЅРёРµ РјР°СЃСЃРёРІР° СЃ РїСЂРѕРІРµСЂРєРѕР№
+	for (y = 0; y < N; y++) {
+		for (x = 0; x < N; x++) {
+			if (playing_field[y][x] != '#' && (playing_field[y + 1][x] == '*' || ((playing_field[y + 1][x] - '0') > 0)) && y != 9) check_field[y][x] += 1;
+			if (playing_field[y][x] != '#' && (playing_field[y - 1][x] == '*' || ((playing_field[y - 1][x] - '0') > 0)) && y != 0) check_field[y][x] += 1;
+			if (playing_field[y][x] != '#' && (playing_field[y][x + 1] == '*' || ((playing_field[y][x + 1] - '0') > 0)) && x != 9) check_field[y][x] += 1;
+			if (playing_field[y][x] != '#' && (playing_field[y][x - 1] == '*' || ((playing_field[y][x - 1] - '0') > 0)) && x != 0) check_field[y][x] += 1;
+			if (playing_field[y][x] == '1') check_field[y][x] = 1;
+		}
+	}
+
+	for (y = 0; y < N; y++) {
+		int summ = 0;
+		for (x = 0; x < N; x++) {
+			summ += check_field[y][x];
+		}
+		if (summ != check_y[y]) {
+			printf("РќРµРїСЂР°РІРёР»СЊРЅРѕ y\n");
+			break;
+		}
+	}
+
+	for (x = 0; x < N; x++) {
+		int summ = 0;
+		for (y = 0; y < N; y++) {
+			summ += check_field[y][x];
+		}
+		if (summ != check_x[x]) {
+			printf("РќРµРїСЂР°РІРёР»СЊРЅРѕ x\n");
+			break;
+		}
+	}
+
+	for (y = 0; y < N; y++) //РІС‹РІРѕРґ РјР°СЃСЃРёРІР° РІ РєРѕРЅСЃРѕР»СЊ РїРѕСЃС‚РѕСЂС‡РЅРѕ
+	{
+		for (x = 0; x < N; x++)
+		{
+			printf("%d ", check_field[y][x]);
+
+		}
+		printf("\n");
+	}
+
+
+	for (y = 0; y < N; y++) //РїСЂРѕРІРµСЂРєР° СЃС‚СЂРѕРє РЅР° РЅР°Р»РёС‡РёРµ 5 РёРґСѓС‰РёС… РїРѕРґСЂСЏР» СЃРёРјРІРѕР»РѕРІ #
 	{
 		for (x = 0; x < N; x++)
 		{
@@ -162,7 +210,7 @@ int main()
 		check = 0; 
 	}
 
-	for (x = 0; x < N; x++)	//проверка столбцов на наличие 5 идущих подрял символов #
+	for (x = 0; x < N; x++)	//РїСЂРѕРІРµСЂРєР° СЃС‚РѕР»Р±С†РѕРІ РЅР° РЅР°Р»РёС‡РёРµ 5 РёРґСѓС‰РёС… РїРѕРґСЂСЏР» СЃРёРјРІРѕР»РѕРІ #
 	{
 		for (y = 0; y < N; y++)
 		{
@@ -176,172 +224,10 @@ int main()
 		check = 0; 
 	}
 
-	//проверка условия головоломки(не работает)
-	for (y = 0; y < N; y++)
-	{
-		for (x = 0; x < N; x++) //построчная проверка на наличие цифры в ячейке массива
-		{
-			if (playing_field[y][x] != '*' && playing_field[y][x] != '#' && playing_field[y][x] != '1')
-			{
-				count_array = 0;
-				for (int y1 = y; y1 < N; y1 += 1)
-				{
-					for (int x1 = x; x1 < N; x1 += 1)
-					{
-						if (playing_field[y - 1][x] == '*' || (playing_field[y - 1][x] == playing_field[y][x])) {
-							array(array_x[count_array], array_y[count_array], x1, y1, count_array);
-							count_array++;
-							y1 -= 1;
-						}
-						else {
-							if (playing_field[y][x - 1] == '*' || (playing_field[y][x - 1] == playing_field[y][x])) {
-								array(array_x[count_array], array_y[count_array], x1, y1, count_array);
-								count_array++;
-								x1 -= 1;
-							}
-							else {
-								if (playing_field[y][x + 1] == '*' || (playing_field[y][x + 1] == playing_field[y][x])) {
-									array(array_x[count_array], array_y[count_array], x1, y1, count_array);
-									count_array++;
-									x1 += 1;
-								}
-								else {
-									y1 = y;
-									x1 = x;
-								}
-							}
-						}
-
-						if (playing_field[y][x - 1] == '*' || (playing_field[y][x - 1] == playing_field[y][x])) {
-							array(array_x[count_array], array_y[count_array], x1, y1, count_array);
-							count_array++;
-							x1 -= 1;
-						}
-						else {
-							if (playing_field[y - 1][x] == '*' || (playing_field[y - 1][x] == playing_field[y][x])) {
-								array(array_x[count_array], array_y[count_array], x1, y1, count_array);
-								count_array++;
-								y1 -= 1;
-							}
-							else {
-								if (playing_field[y + 1][x] == '*' || (playing_field[y + 1][x] == playing_field[y][x])) {
-									array(array_x[count_array], array_y[count_array], x1, y1, count_array);
-									count_array++;
-									y1 += 1;
-								}
-								else {
-									y1 = y;
-									x1 = x;
-								}
-							}
-						}
-
-						if (playing_field[y][x + 1] == '*' || (playing_field[y][x + 1] == playing_field[y][x])) {
-							array(array_x[count_array], array_y[count_array], x1, y1, count_array);
-							count_array++;
-							x1 += 1;
-						}
-						else {
-							if (playing_field[y - 1][x] == '*' || (playing_field[y - 1][x] == playing_field[y][x])) {
-								array(array_x[count_array], array_y[count_array], x1, y1, count_array);
-								count_array++;
-								y1 -= 1;
-							}
-							else {
-								if (playing_field[y + 1][x] == '*' || (playing_field[y + 1][x] == playing_field[y][x])) {
-									array(array_x[count_array], array_y[count_array], x1, y1, count_array);
-									count_array++;
-									y1 += 1;
-								}
-								else {
-									y1 = y;
-									x1 = x;
-								}
-							}
-						}
-
-						if (playing_field[y + 1][x] == '*' || (playing_field[y + 1][x] == playing_field[y][x])) {
-							array(array_x[count_array], array_y[count_array], x1, y1, count_array);
-							count_array++;
-							y1 += 1;
-						}
-						else {
-							if (playing_field[y][x - 1] == '*' || (playing_field[y][x - 1] == playing_field[y][x])) {
-								array(array_x[count_array], array_y[count_array], x1, y1, count_array);
-								count_array++;
-								x1 -= 1;
-							}
-							else {
-								if (playing_field[y][x + 1] == '*' || (playing_field[y][x + 1] == playing_field[y][x])) {
-									array(array_x[count_array], array_y[count_array], x1, y1, count_array);
-									count_array++;
-									x1 += 1;
-								}
-								else {
-									y1 = y;
-									x1 = x;
-								}
-							}
-
-							
-
-						}
-
-					}
-				}
-				sort_array(array_x, array_y, count_array);
-				if ((int)count_array != playing_field[y][x] - '0')
-				{
-					printf("Ошибка");
-					break;
-				}
-			}
-		}
-
-	}
-
-	/*for (int i = 0; i < 15; i++)
-	{
-		int count1 = 0;
-		int count2 = 0;
-		for (int j = islands[i].y; j < 10; j++) {
-			for (int l = islands[i].x; l < 10; l++) {
-				if (playing_field[j][l] == '*' && ())
-			}
-		}
-	}*/
 	
 
-	if (check == 5) printf("Головоломка решена не правильно"); //если проверка не пройдена, то вывести сообщение об этом 
+
+
+	if (check == 5) printf("Р“РѕР»РѕРІРѕР»РѕРјРєР° СЂРµС€РµРЅР° РЅРµ РїСЂР°РІРёР»СЊРЅРѕ"); //РµСЃР»Рё РїСЂРѕРІРµСЂРєР° РЅРµ РїСЂРѕР№РґРµРЅР°, С‚Рѕ РІС‹РІРµСЃС‚Рё СЃРѕРѕР±С‰РµРЅРёРµ РѕР± СЌС‚РѕРј 
 
 }	
-
-int array(int* array_x, int* array_y, int new_x, int new_y, int count)
-{
-	array_x[count] = new_x;
-	array_y[count] = new_y;
-}
-
-int sort_array(int* array_x, int* array_y, int count) {
-	for (int i = 0; i < count; i++) {
-		int duble_x = array_x[i];
-		int duble_y = array_y[i];
-		for (int l = 0; l < count; l++) {
-			for (int j = i + 1; j < count; j++) {
-
-				if (duble_x == array_x[j] && duble_y == array_y[j]) {
-					delete(array_x, count, j);
-					delete(array_y, count, j);
-				}
-			}
-		}
-	}
-}
-
-int delete(int* ptr_array, int size, int i) {
-
-	for (; i < size; i++)
-	{
-		ptr_array[i] = ptr_array[i + 1];
-	}
-}
