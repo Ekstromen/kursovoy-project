@@ -3,9 +3,6 @@
 #include <locale.h>
 #include <math.h>
 #include <conio.h>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
 #define N 10 //размер игрового поля
 #define V 15
 
@@ -20,8 +17,8 @@ typedef struct value Value;
 
 int main()
 {
-	int check_x[N] = {3,4,3,7,2,6,9,4,4,10};
-	int check_y[N] = {4,4,7,5,4,4,7,3,7,7};
+	int check_x[N] = { 3,4,3,7,2,6,9,4,4,10 };
+	int check_y[N] = { 4,4,7,5,4,4,7,3,7,7 };
 	char playing_field[N][N]; //игровое поле
 	char view_field[N][N]; //поле вывода
 	int check_field[N][N]; //поле проверки
@@ -29,7 +26,7 @@ int main()
 	int x, y;	//координаты для объявления значений игрового поля
 	int ox = 0, oy = 0; //координаты курсора
 	int nx, ny; //координаты курсора до перемещения
-	char key = '0',check = '0', check1 = '0';
+	char key = '0', check = '0', check1 = '0';
 
 	islands[0].symbol = '1'; //заполнение структуры 
 	islands[0].y = 0;
@@ -84,7 +81,7 @@ int main()
 		for (x = 0; x < N; x++)
 		{
 			playing_field[y][x] = '*';
-		
+
 		}
 	}
 
@@ -130,7 +127,7 @@ int main()
 			ox = nx; //запрет на закрашивание и переход на ячейки с цифрами
 		}
 
-		if (key == 'f') 
+		if (key == 'f')
 		{
 			if (playing_field[oy][ox] == '*') playing_field[oy][ox] = '#'; //закрашивание ячеек
 			else playing_field[oy][ox] = '*';
@@ -146,8 +143,8 @@ int main()
 
 			}
 			printf("\n");
-		} 
-		printf("%d,%d\n",oy,ox);
+		}
+		printf("%d,%d\n", oy, ox);
 		printf("Для того, чтобы завершить выполнение и перейти к проверке нажмите 'E' \n"); //приглашение к завершению решения головомки
 
 	} while (key != 'e');
@@ -203,11 +200,11 @@ int main()
 			if (check == 5) break;
 			if (playing_field[y][x] == '#') check += 1;
 			else check = 0;
-			
+
 
 		}
 		if (check == 5) break;
-		check = 0; 
+		check = 0;
 	}
 
 	for (x = 0; x < N; x++)	//проверка столбцов на наличие 5 идущих подрял символов #
@@ -217,17 +214,17 @@ int main()
 			if (check == 5) break;
 			if (playing_field[y][x] == '#') check += 1;
 			else check = 0;
-			
+
 
 		}
 		if (check == 5) break;
-		check = 0; 
+		check = 0;
 	}
 
-	
+
 
 
 
 	if (check == 5) printf("Головоломка решена не правильно"); //если проверка не пройдена, то вывести сообщение об этом 
 
-}	
+}
