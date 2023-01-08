@@ -17,38 +17,31 @@ struct value
 
 typedef struct value Value;
 
-
+struct value* read(struct value* islands, int* check_x, int* check_y); //чтение структуры из файла, а также чтение "кода уровня"
 void creating_field(char** playing_field, int** check_field, Value* islands, int* px, int* py);//функция для создания игрового поля
 void game_out(char** playing_field, char** view_field, int* px, int* py);//фунуция для вывода игрового поля 
 int checking(char** playing_field, int** check_field, int* px, int* py, int* check_y, int* check_x, int check);//функция для проверки основных правил головоломки
 
 int main()
 {
-	int check_x[N] = { 3,4,3,7,2,6,9,4,4,10 }; //одномерные массивы, хранящие "код правильно пройденнго уровня"
-	int check_y[N] = { 4,4,7,5,4,4,7,3,7,7 };
+	int check_x[N]; //одномерные массивы, хранящие "код правильно пройденнго уровня"
+	int check_y[N];
 	char **playing_field = (char **)malloc(N*sizeof(char*)); //двумерный массив игрового поля, хранящий основные значения
 	char **view_field = (char **)malloc(N*sizeof(char*)); //двумерный массив, использующийся как поле вывода
 	int **check_field = (int **)malloc(N*sizeof(int*)); //двумерный массив, использующийся для создания "кода уровня" 
+	for (int r = 0; r < N; r++) playing_field[r] = (char*)malloc(N * sizeof(char));
+	for (int r = 0; r < N; r++) view_field[r] = (char*)malloc(N * sizeof(char));
+	for (int r = 0; r < N; r++) check_field[r] = (int*)malloc(N * sizeof(int));
 	Value islands[V]; //структура хранящяя координаты и значения островов
-	islands[0].symbol = '1'; islands[0].y = 0; islands[0].x = 2; islands[1].symbol = '2'; islands[1].y = 0; islands[1].x = 7; islands[2].symbol = '2'; islands[2].y = 1; islands[2].x = 1; islands[3].symbol = '1'; islands[3].y = 1; islands[3].x = 4; islands[4].symbol = '3';islands[4].y = 2;islands[4].x = 5;islands[5].symbol = '5';islands[5].y = 2;islands[5].x = 9;islands[6].symbol = '2';islands[6].y = 3;islands[6].x = 2;islands[7].symbol = '1';islands[7].y = 4;islands[7].x = 0;islands[8].symbol = '5';islands[8].y = 4;islands[8].x = 6;islands[9].symbol = '2';islands[9].y = 5;islands[9].x = 1;islands[10].symbol = '1';islands[10].y = 5;islands[10].x = 8;islands[11].symbol = '5';islands[11].y = 6;islands[11].x = 4;islands[12].symbol = '2';islands[12].y = 8;islands[12].x = 0;islands[13].symbol = '3';islands[13].y = 9;islands[13].x = 5;islands[14].symbol = '4';islands[14].y = 9;islands[14].x = 7;
 	int x, y;	//координаты для объявления значений игрового поля
 	int ox = 0, oy = 0; //координаты курсора
 	int nx, ny; //предыдущие координаты курсора
-	char key = '0', check = '0', check1 = '0'; //переменные для проверки правильности выполнения головоломки
+	char key = '0', check = '0'; //переменные для проверки правильности выполнения головоломки
 	int* px = &x, * py = &y; //указатели на переменные координат 
 	int* pox = &ox, * poy = &oy; //указатели на переменные координат 
-	char* pkey = &key; //указатели на переменные координат 
 	
-	for (int r = 0; r < N; r++) {
-		playing_field[r] = (char*)malloc(N * sizeof(char));
-	}
-	for (int r = 0; r < N; r++) {
-		view_field[r] = (char*)malloc(N * sizeof(char));
-	}
-	for (int r = 0; r < N; r++) {
-		check_field[r] = (int*)malloc(N * sizeof(int));
-	}
 	setlocale(LC_ALL, "RUS");
+	read(islands, check_x, check_y);
 	menu();// вызов функции которая открывает меню
 
 	creating_field(playing_field,check_field,islands,px,py); //вызов функции для создания игровогополя 
@@ -109,7 +102,26 @@ int main()
 	checking(playing_field,check_field,px,py,check_y,check_x,check);// вызов функции для создания из "карты уровня" "кода уровня" и их сравнение для определения правильности решения головоломки.
 }
 
-
+struct value* read(struct value* islands, int* check_x, int* check_y) {
+	FILE* f;
+	f = fopen("1.txt", "r+");
+	if (f == NULL) return 0;
+	for (int i = 0; i < V; i++) {
+		islands[i].symbol = fgetc(f);
+		islands[i].y = fgetc(f) - '0';
+		islands[i].x = fgetc(f) - '0';
+	}
+	for (int i = 0; i < N; i++) {
+		if (fgetc(f) == '*') check_x[i] = 10;
+		else check_x[i] = fgetc(f) - '0';
+	}
+	for (int i = 0; i < N; i++) {
+		if (fgetc(f) == '*') check_y[i] = 10;
+		else check_y[i] = fgetc(f) - '0';
+	}
+	fclose(f);
+	return islands;
+}
 
 void creating_field(char **playing_field, int **check_field, Value* islands, int* px, int* py) {
 	int x = px, y = py; //функция принимает координаты
