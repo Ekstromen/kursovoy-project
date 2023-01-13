@@ -1,0 +1,18 @@
+﻿  Source.c
+D:\Программирование\kursovoy\kursovoy\Source.c(47,2): warning C4013: menu: нет определения; предполагается "extern" с возвратом типа "int"
+D:\Программирование\kursovoy\kursovoy\Source.c(56,40): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int"
+D:\Программирование\kursovoy\kursovoy\Source.c(56,37): warning C4024: game_out: различные типы для формального и фактического параметров 3
+D:\Программирование\kursovoy\kursovoy\Source.c(56,44): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int"
+D:\Программирование\kursovoy\kursovoy\Source.c(56,41): warning C4024: game_out: различные типы для формального и фактического параметров 4
+D:\Программирование\kursovoy\kursovoy\Source.c(149,22): warning C4047: return: "int" отличается по уровням косвенного обращения от "char **"
+D:\Программирование\kursovoy\kursovoy\Source.c(153,6): warning C4047: инициализация: "int" отличается по уровням косвенного обращения от "int *"
+D:\Программирование\kursovoy\kursovoy\Source.c(153,14): warning C4047: инициализация: "int" отличается по уровням косвенного обращения от "int *"
+D:\Программирование\kursovoy\kursovoy\Source.c(207,6): warning C4047: инициализация: "int" отличается по уровням косвенного обращения от "int *"
+D:\Программирование\kursovoy\kursovoy\Source.c(207,14): warning C4047: инициализация: "int" отличается по уровням косвенного обращения от "int *"
+D:\Программирование\kursovoy\kursovoy\Source.c(219,6): warning C4047: инициализация: "int" отличается по уровням косвенного обращения от "int *"
+D:\Программирование\kursovoy\kursovoy\Source.c(219,14): warning C4047: инициализация: "int" отличается по уровням косвенного обращения от "int *"
+D:\Программирование\kursovoy\kursovoy\Source.c(134): warning C4715: create_save: значение возвращается не при всех путях выполнения
+D:\Программирование\kursovoy\kursovoy\Source.c(204): warning C4715: creating_field: значение возвращается не при всех путях выполнения
+D:\Программирование\kursovoy\kursovoy\Source.c(293): warning C4716: menu: должна возвращать значение
+D:\Программирование\kursovoy\kursovoy\Source.c(275): warning C4716: checking: должна возвращать значение
+  kursovoy.vcxproj -> D:\Программирование\kursovoy\x64\Debug\kursovoy.exe
