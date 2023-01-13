@@ -20,7 +20,7 @@ typedef struct value Value;
 struct value* read(struct value* islands);
 int create_save(char** playing_field);
 int load_save(char** playing_field);
-void creating_field(char** playing_field, int** check_field, Value* islands, int* px, int* py);//функция для создания игрового поля
+int creating_field(char** playing_field, int** check_field, Value* islands, int* px, int* py);//функция для создания игрового поля
 void game_out(char** playing_field, char** view_field, int* px, int* py);//фунуция для вывода игрового поля 
 int checking(char** playing_field, int** check_field, int* px, int* py, int* check_y, int* check_x);//функция для проверки основных правил головоломки
 
@@ -47,7 +47,8 @@ int main()
 	menu();// вызов функции которая открывает меню
 	_getch();
 	system("cls");
-	creating_field(playing_field,check_field,islands,px,py); //вызов функции для создания игрового поля 
+	if (creating_field(playing_field, check_field, islands, px, py) == 0) exit(0);
+	
 
 	do //бесконечный цикл для постоянного ввода значений и перемещения курсора
 	{
@@ -140,22 +141,24 @@ int load_save(char** playing_field) {
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
 				playing_field[i][j] = fgetc(fb);
-				return playing_field;
+				
 			}
 		}
 	}
 	fclose(fb);
-	
+	return playing_field;
 }
 
-void creating_field(char **playing_field, int **check_field, Value* islands, int* px, int* py) {
+int creating_field(char **playing_field, int **check_field, Value* islands, int* px, int* py) {
 	int x = px, y = py; //функция принимает координаты
 	printf("Введите: 1) Если хотите начать с начала. 2) Если хотите загрузить последние сохранненные данные.\n");
-	int sw = 0;
-	scanf("%d", &sw);
+	char sw = '0';
+	scanf("%c", &sw);
+	FILE* fb;
+	fb = fopen("buffer.txt", "r");
 	switch (sw)
 	{
-	case 1:
+	case '1':
 		for (y = 0; y < N; y++) { //первичное заполнение игрового поля
 			for (x = 0; x < N; x++) {
 				playing_field[y][x] = '*';
@@ -164,8 +167,8 @@ void creating_field(char **playing_field, int **check_field, Value* islands, int
 		printf("Нажмите любую клавишу чтобы продолжить...\n");
 		break;
 
-	case 2:
-		if (load_save(playing_field) == 0) {
+	case '2':
+		if (getc(fb) == EOF) {
 			for (y = 0; y < N; y++) { //первичное заполнение игрового поля
 				for (x = 0; x < N; x++) {
 					playing_field[y][x] = '*';
@@ -181,10 +184,12 @@ void creating_field(char **playing_field, int **check_field, Value* islands, int
 		break;
 
 	default:
-		printf("Ошибка! Введен неверный символ.");
+		printf("Ошибка! Введен неверный символ.\n");
+		return 0;
 		break;
 	}
 	
+	fclose(fb);
 	//первичное заполнение поля проверки
 	for (y = 0; y < N; y++) {
 		for (x = 0; x < N; x++) {
@@ -248,7 +253,7 @@ int checking(char** playing_field, int** check_field, int* px, int* py, int* che
 		check = 0;	
 	}
 
-	for (x = 0; x < N; x++)	//проверка столбцов в игровом поле на наличие 5 идущих подрял символов #
+	for (x = 0; x < N; x++)	//проверка столбцов в игровом поле на наличие 5 идущих подряд символов #
 	{
 		for (y = 0; y < N; y++)
 		{
@@ -260,11 +265,11 @@ int checking(char** playing_field, int** check_field, int* px, int* py, int* che
 		check = 0;
 	}
 
-	printf("\n", check);
+	printf("\n");
 	if (check == 5) printf("Головоломка решена не правильно.\n"); //если проверка не пройдена, то вывести сообщение об этом 
 	else {
 		printf("Головоломка решена правильно!\n");//если проверка пройдена, то вывести сообщение об этом 
-		FILE* file = fopen("buffer.txt", "w+");
+		FILE* file = fopen("buffer.txt", "w");
 		fclose(file);
 	}
 }
